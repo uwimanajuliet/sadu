@@ -97,6 +97,17 @@ const CarsPage = () => {
           <p className="a3 text-base leading-7 text-white/60 max-w-lg mx-auto drop-shadow">
             Browse available vehicles and book instantly with <span className="font-semibold text-white/90">Mobile Money or Credit Card</span>.
           </p>
+          <div className="inline-flex rounded-xl overflow-hidden shadow-lg border border-white/10">
+  <a href="/contact?type=buy"
+    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-5 py-1 text-sm font-bold text-white transition">
+    🛒 Buy a Car
+  </a>
+  <div className="w-px bg-white/20"/>
+  <a href="/contact?type=sell"
+    className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 px-6 py-1 text-sm font-bold text-white transition">
+    💰 Sell a Car
+  </a>
+</div>
           <div className="a3 mt-8 inline-flex items-center gap-8 rounded-2xl border border-white/10 bg-white/10 px-8 py-4 backdrop-blur-md">
             {[['🚗',`${cars.length}+`,'Vehicles'],['⚡','Instant','Booking'],['💳','MoMo &','Card']].map(([ic,n,l])=>(
               <div key={l} className="text-center">
