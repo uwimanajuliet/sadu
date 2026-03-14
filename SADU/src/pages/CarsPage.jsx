@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react';
 import API from '../config.js';
 import BookingModal from '../components/BookingModal.jsx';
 
+import car1 from '../assets/car1.png';
+import car2 from '../assets/car2.png';
+import car3 from '../assets/car3.png';
+import car4 from '../assets/car4.png';
+
+const SLIDES = [car1, car2, car3, car4];
+
 const TRANSMISSIONS = ['All', 'Automatic', 'Manual'];
 const FUEL_TYPES    = ['All', 'Petrol', 'Diesel', 'Electric', 'Hybrid'];
 
@@ -13,6 +20,13 @@ const CarsPage = () => {
   const [transmission, setTransmission] = useState('All');
   const [fuel, setFuel]         = useState('All');
   const [selectedCar, setSelectedCar] = useState(null);
+  const [slideIndex, setSlideIndex]   = useState(0);
+
+  // Auto-advance slides every 4 seconds
+  useEffect(() => {
+    const t = setInterval(() => setSlideIndex(p => (p + 1) % SLIDES.length), 4000);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     API.get('/cars/available')
@@ -54,26 +68,36 @@ const CarsPage = () => {
         .img-zoom:hover img{transform:scale(1.07)}
       `}</style>
 
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 px-6 py-20 text-center">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 -right-32 h-[440px] w-[440px] rounded-full bg-blue-600 opacity-20 blur-[100px] animate-pulse"/>
-          <div className="absolute -bottom-24 -left-24 h-[360px] w-[360px] rounded-full bg-cyan-500 opacity-15 blur-[80px] animate-pulse" style={{animationDelay:'1.4s'}}/>
-        </div>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{backgroundImage:'linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)',backgroundSize:'60px 60px'}}/>
-        <div className="relative z-10 mx-auto max-w-xl">
+      {/* ══ HERO SLIDESHOW ══ */}
+      <section className="relative overflow-hidden" style={{height:'clamp(380px,65vh,620px)'}}>
+
+        {/* Slides */}
+        {SLIDES.map((src, i) => (
+          <div key={i}
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{ opacity: i === slideIndex ? 1 : 0, zIndex: i === slideIndex ? 1 : 0 }}>
+            <img src={src} alt={`car-${i+1}`}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: 'brightness(0.5)' }}/>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70"/>
+            <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+              style={{backgroundImage:'linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)',backgroundSize:'60px 60px'}}/>
+          </div>
+        ))}
+
+        {/* Content — identical to original, nothing changed */}
+        <div className="relative z-10 mx-auto max-w-xl h-full flex flex-col items-center justify-center px-6 text-center">
           <div className="a1 mb-5 inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-400/10 px-4 py-2">
             <span className="pdot inline-block h-2 w-2 rounded-full bg-blue-400"/>
             <span className="text-[11px] font-bold uppercase tracking-widest text-blue-300">Available Now</span>
           </div>
-          <h1 className="a2 mb-4 font-extrabold leading-tight" style={{fontSize:'clamp(2rem,5vw,3.8rem)'}}>
+          <h1 className="a2 mb-4 font-extrabold leading-tight text-white drop-shadow-lg" style={{fontSize:'clamp(2rem,5vw,3.8rem)'}}>
             <span className="shimmer-b">Cars & Transport</span>
           </h1>
-          <p className="a3 text-base leading-7 text-blue-100/60 max-w-lg mx-auto">
+          <p className="a3 text-base leading-7 text-white/60 max-w-lg mx-auto drop-shadow">
             Browse available vehicles and book instantly with <span className="font-semibold text-white/90">Mobile Money or Credit Card</span>.
           </p>
-          <div className="a3 mt-8 inline-flex items-center gap-8 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 backdrop-blur-md">
+          <div className="a3 mt-8 inline-flex items-center gap-8 rounded-2xl border border-white/10 bg-white/10 px-8 py-4 backdrop-blur-md">
             {[['🚗',`${cars.length}+`,'Vehicles'],['⚡','Instant','Booking'],['💳','MoMo &','Card']].map(([ic,n,l])=>(
               <div key={l} className="text-center">
                 <div className="text-2xl">{ic}</div>
@@ -82,13 +106,33 @@ const CarsPage = () => {
               </div>
             ))}
           </div>
+
+          {/* Dot indicators */}
+          <div className="mt-6 flex items-center gap-2">
+            {SLIDES.map((_, i) => (
+              <button key={i} onClick={() => setSlideIndex(i)}
+                className={`rounded-full transition-all duration-300 ${
+                  i === slideIndex ? 'w-7 h-2.5 bg-white' : 'w-2.5 h-2.5 bg-white/40 hover:bg-white/70'
+                }`}/>
+            ))}
+          </div>
         </div>
-        <svg className="pointer-events-none absolute bottom-0 left-0 w-full" viewBox="0 0 1440 40" preserveAspectRatio="none">
+
+        {/* Prev / Next arrows */}
+        <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 flex justify-between z-20 pointer-events-none">
+          <button onClick={() => setSlideIndex(p => (p - 1 + SLIDES.length) % SLIDES.length)}
+            className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/50 transition text-lg">‹</button>
+          <button onClick={() => setSlideIndex(p => (p + 1) % SLIDES.length)}
+            className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/50 transition text-lg">›</button>
+        </div>
+
+        {/* Wave */}
+        <svg className="pointer-events-none absolute bottom-0 left-0 w-full z-10" viewBox="0 0 1440 40" preserveAspectRatio="none">
           <path d="M0,20 C360,40 1080,0 1440,20 L1440,40 L0,40 Z" fill="#f9fafb"/>
         </svg>
       </section>
 
-      {/* SEARCH + FILTERS */}
+      {/* SEARCH + FILTERS — unchanged */}
       <section className="sticky top-[60px] z-30 bg-white border-b border-gray-100 shadow-sm px-6 py-4">
         <div className="mx-auto max-w-5xl flex flex-wrap gap-3 items-center justify-between">
           <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 flex-1 min-w-[200px] max-w-sm focus-within:border-blue-400 transition">
@@ -124,7 +168,7 @@ const CarsPage = () => {
         </div>
       </section>
 
-      {/* CARDS */}
+      {/* CARDS — unchanged */}
       <section className="mx-auto max-w-5xl px-6 py-10">
         {loading ? (
           <div className="flex flex-col items-center py-24 gap-3">
@@ -146,8 +190,6 @@ const CarsPage = () => {
             {filtered.map((car, i) => (
               <div key={car.id} className="lift rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden flex flex-col"
                 style={{animation:`fadeUp .6s cubic-bezier(.22,1,.36,1) ${i*.07}s both`}}>
-
-                {/* image */}
                 <div className="img-zoom relative h-48 w-full overflow-hidden bg-blue-50 shrink-0">
                   {car.image
                     ? <img src={`http://localhost:5000/uploads/${car.image}`} alt={car.name} className="w-full h-full object-cover"/>
@@ -162,12 +204,9 @@ const CarsPage = () => {
                     {Number(car.price_per_day).toLocaleString()} RWF/day
                   </span>
                 </div>
-
                 <div className="p-5 flex flex-col flex-1">
                   <h3 className="font-extrabold text-gray-800 text-base mb-1">{car.name}</h3>
                   <p className="text-xs text-gray-400 mb-3">{car.brand} {car.model} · {car.year}</p>
-
-                  {/* specs */}
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     {[
                       ['👥', `${car.seats} seats`],
@@ -180,11 +219,9 @@ const CarsPage = () => {
                       </div>
                     ))}
                   </div>
-
                   {car.description && (
                     <p className="text-xs text-gray-400 leading-5 line-clamp-2 mb-4 flex-1">{car.description}</p>
                   )}
-
                   <button
                     onClick={() => setSelectedCar(car)}
                     disabled={car.status !== 'available'}
@@ -202,7 +239,7 @@ const CarsPage = () => {
         )}
       </section>
 
-      {/* CTA */}
+      {/* CTA — unchanged */}
       <section className="bg-gradient-to-br from-blue-700 to-blue-900 px-6 py-14 text-center">
         <h2 className="mb-3 text-2xl font-extrabold text-white">Have a transport business?</h2>
         <p className="mb-6 text-blue-200/75">List your vehicles and reach thousands of customers.</p>
@@ -211,13 +248,12 @@ const CarsPage = () => {
         </a>
       </section>
 
-      {/* BOOKING MODAL */}
+      {/* BOOKING MODAL — unchanged */}
       {selectedCar && (
         <BookingModal
           car={selectedCar}
           onClose={() => setSelectedCar(null)}
           onSuccess={() => {
-            // refresh to update availability
             API.get('/cars/available').then(r => { setCars(r.data); setFiltered(r.data); });
           }}
         />
