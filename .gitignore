@@ -1,0 +1,9 @@
+node_modules/
+.env
+uploads/
+dist/
+sadu/node_modules/
+sadu-backend/node_modules/
+sadu-backend/uploads/
+sadu-backend/.env
+sadu/.env
