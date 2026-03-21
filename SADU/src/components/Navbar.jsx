@@ -20,13 +20,13 @@ const Navbar = () => {
   const handleLogout = () => { logout(); navigate('/'); };
 
   const links = [
-    { to: '/',            label: 'Home',        icon: '🏠' },
-    { to: '/ads',         label: 'Ads',         icon: '📋' },
-    { to: '/cars',        label: 'Cars',        icon: '🚗' },
-    { to: '/tourism',     label: 'Tourism',     icon: '🏨' },
-    { to: '/internships', label: 'Internships', icon: '🎓', badge: 'New' },
-    { to: '/about',       label: 'About',       icon: '💡' },
-    { to: '/contact',     label: 'Contact',     icon: '📬' },
+    { to: '/',            label: 'Home',         },
+    { to: '/ads',         label: 'Ads',          },
+    { to: '/cars',        label: 'Cars',         },
+    { to: '/tourism',     label: 'Tourism',      },
+    { to: '/internships', label: 'Internships',  badge: 'New' },
+    { to: '/about',       label: 'About',       },
+    { to: '/contact',     label: 'Contact',      },
   ];
 
   const isActive = (to) =>
@@ -325,7 +325,7 @@ const Navbar = () => {
               {admin && (
                 <Link to="/admin" className="mob-link"
                   style={{background:'rgba(250,204,21,0.08)', border:'1px solid rgba(250,204,21,0.15)'}}>
-                  <span className="mob-icon">⚡</span>
+                 
                   <span className="flex-1 text-yellow-300 font-bold">Dashboard</span>
                 </Link>
               )}
@@ -338,7 +338,7 @@ const Navbar = () => {
                 </button>
               ) : (
                 <Link to="/login" className="btn-login w-full justify-center py-3 text-base">
-                  🔐 Login to Admin
+                  🔐 Login 
                 </Link>
               )}
             </div>
