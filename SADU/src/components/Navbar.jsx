@@ -280,13 +280,13 @@ const Navbar = () => {
                 </div>
                 <Link to="/admin" className="nav-link"
                   style={{background:'rgba(250,204,21,0.1)', border:'1px solid rgba(250,204,21,0.2)', color:'#fcd34d'}}>
-                  ⚡ Dashboard
+                   Dashboard
                 </Link>
                 <div className="nav-divider"/>
-                <button onClick={handleLogout} className="btn-logout">↩ Logout</button>
+                <button onClick={handleLogout} className="btn-logout"> Logout</button>
               </>
             ) : (
-              <Link to="/login" className="btn-login">🔐 Login</Link>
+              <Link to="/login" className="btn-login"> Login</Link>
             )}
           </div>
 
@@ -334,11 +334,11 @@ const Navbar = () => {
             <div className="mt-4 pt-4 border-t border-white/10">
               {admin ? (
                 <button onClick={handleLogout} className="btn-logout w-full justify-center py-3 text-base">
-                  ↩ Logout
+                   Logout
                 </button>
               ) : (
                 <Link to="/login" className="btn-login w-full justify-center py-3 text-base">
-                  🔐 Login 
+                   Login 
                 </Link>
               )}
             </div>
